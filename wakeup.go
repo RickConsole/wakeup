@@ -35,13 +35,14 @@ func GetVendor() string {
 	}
 	response, _ := http.Get("https://api.macaddress.io/v1?apiKey=at_Spa8oMJfznmFraFhS7gyTC6NO3qDU&output=vendor&search=" + mac)
 	defer response.Body.Close()
+	//Converting response into string result
 	body, _ := ioutil.ReadAll(response.Body)
 	vendor := string(body)
-	//Converting response into string result
 	return vendor
 }
 
 func Check() bool {
+	//Do basic check if vendor matches VMware or virtualbox
 	vendor := GetVendor()
 	if strings.Contains(vendor, "VMware") {
 		return false
