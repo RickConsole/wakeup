@@ -8,8 +8,6 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
-	"os"
-	"syscall"
 )
 
 func GetMAC() string {
@@ -75,15 +73,21 @@ func CheckUsingSysinfo() bool {
 			return false
 		} else if strings.Contains(string(out), "VirtualBox") {
 			return false
-		} else {
-			return true
+		} else if strings.Contains(string(out), "hypervisor") {
+			return false
 		}
+
 	} else if opsys == "linux" {
 		cmd := exec.Command("cat", "/sys/class/dmi/id/product_name")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			panic(err)
-		} else if strings.Contains(string(out), "VMware")
+		} else if strings.Contains(string(out), "VMware") {
+			return false
+		} else if strings.Contains(string(out), "Virtual") {
+			return false
+		}
 
 	}
+	return true
 }
