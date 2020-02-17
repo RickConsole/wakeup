@@ -5,7 +5,11 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"os/exec"
+	"runtime"
 	"strings"
+	"os"
+	"syscall"
 )
 
 func GetMAC() string {
@@ -41,8 +45,9 @@ func GetVendor() string {
 	return vendor
 }
 
-func Check() bool {
+func CheckUsingMAC() bool {
 	//Do basic check if vendor matches VMware or virtualbox
+	//Returns false if machine is a VM
 	vendor := GetVendor()
 	if strings.Contains(vendor, "VMware") {
 		return false
@@ -52,5 +57,33 @@ func Check() bool {
 		return false
 	} else {
 		return true
+	}
+}
+
+func CheckUsingSysinfo() bool {
+	//Uses system info commands to detect VM probability
+	//Returns false if machine is a VM
+	opsys := runtime.GOOS
+
+	if opsys == "windows" {
+		cmd := exec.Command("SYSTEMINFO")
+		out, err := cmd.CombinedOutput()
+
+		if err != nil {
+			panic(err)
+		} else if strings.Contains(string(out), "VMware") {
+			return false
+		} else if strings.Contains(string(out), "VirtualBox") {
+			return false
+		} else {
+			return true
+		}
+	} else if opsys == "linux" {
+		cmd := exec.Command("cat", "/sys/class/dmi/id/product_name")
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			panic(err)
+		} else if strings.Contains(string(out), "VMware")
+
 	}
 }
