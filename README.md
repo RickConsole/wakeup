@@ -27,7 +27,7 @@ package main
 import "github.com/RickConsole/wakeup"
 
 func main() {
-  wakeup.Check() //Returns true (for vm) or false (for real machine)
+  wakeup.CheckUsingSysinfo() //Returns true (for real machine) or false (for VM)
 }
 ```
 
@@ -38,4 +38,8 @@ wakeup.GetMAC() //Gets Victims MAC Address
 ```
 ```go
 wakeup.GetVendor() //Acquires Vendor from MAC Address Prefix
+```
+```go
+wakeup.CheckUsingMAC() 
+//Gets client MAC, requests vendor name using mac from maccaddress.io, if its a vm vendor, will return false
 ```
