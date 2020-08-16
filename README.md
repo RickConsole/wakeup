@@ -16,7 +16,7 @@ Wakeup is a Go Library for determining if the host is a VM.
 ## Installation
 
 ```bash
-go get github.com/RickConsole/wakeup
+go get github.com/RIckConsole/wakeup
 ```
 
 ## Example
